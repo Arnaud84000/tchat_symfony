@@ -3,7 +3,6 @@ Test Chat Symfony
 
 Lancer les commandes suivantes :
 <pre>
-cd chat-master && cd chat-master
 composer install 
 php bin/console make:entity --regenerate
  
