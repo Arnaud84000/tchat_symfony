@@ -1,0 +1,63 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Message index{% endblock %}
+
+{% block body %}
+    <h1>Message index</h1>
+    <h1>Connecté en tant que {{ user.username }}</h1>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Username</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for sender in usersList %}
+            {% if sender.username != user.username %}
+        <tr>
+
+            <td>{{ sender.username  }}</td>
+
+        </tr>
+            {% endif  %}
+        {% endfor %}
+        </tbody>
+    </table>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Created_at</th>
+                <th>Receiver</th>
+                <th>Sender</th>
+                <th>Content</th>
+                <th>Viewed</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for message in messages %}
+            <tr>
+                <td>{{ message.createdAt ? message.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ message.receiver.username }}</td>
+                <td>{{ message.sender.username }}</td>
+                <td>{{ message.content }}</td>
+                <td>{{ message.viewed ? 'Yes' : 'No' }}</td>
+                <td>
+                    <a href="{{ path('message_show', {'id': message.id}) }}">show</a>
+                    <a href="{{ path('message_edit', {'id': message.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    {% if user.roles[0] == admin.roles[0] %}
+    <a href="{{ path('message_new', {'id': messages[0].sender.id }) }}">Create new to {{ messages[0].sender.username }}</a>
+    {% else %}
+    <a href="{{ path('message_new', {'id': admin.id}) }}">Create new to {{ admin.username }}</a>
+    {% endif %}
+{% endblock %}
